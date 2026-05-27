@@ -64,6 +64,5 @@ jobs:
       - name: Clean up CI schema
         if: always()
         run: |
-          dbt run-operation drop_schema \
-          --args '{"schema": "dbt_ci_${{ github.event.pull_request.number }}"}'
+          dbt run-operation drop_schema --args "schema: dbt_ci_${{ github.event.pull_request.number }}"
         working-directory: my_project
