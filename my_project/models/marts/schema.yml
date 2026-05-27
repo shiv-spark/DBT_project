@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: movie_rating_summary
+    description: "Aggregated ratings per movie"
+    columns:
+      - name: movie_id
+        tests:
+          - unique
+          - not_null
+
+      - name: total_ratings
+        tests:
+          - not_null
+
+      - name: avg_rating
+        tests:
+          - not_null
+
+  - name: movie_with_tags
+    description: "Movies with aggregated tags"
+    columns:
+      - name: movie_id
+        tests:
+          - unique
+          - not_null
+
+
+
+  - name: top_rated_movies
+    description: "Top movies ranked by average rating with minimum 50 ratings"
+    columns:
+      - name: movie_id
+        tests:
+          - unique
+          - not_null
+      - name: overall_rank
+        tests:
+          - not_null
+
+  - name: user_activity_summary
+    description: "User behaviour and activity analysis"
+    columns:
+      - name: user_id
+        tests:
+          - unique
+          - not_null
+
+  - name: genre_popularity
+    description: "Genre level popularity and rating analysis"
+    columns:
+      - name: genre
+        tests:
+          - unique
+          - not_null
+
+  - name: movie_decade_analysis
+    description: "Movie and rating trends grouped by decade"
+    columns:
+      - name: decade
+        tests:
+          - unique
+          - not_null

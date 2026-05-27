@@ -1,0 +1,22 @@
+# Virtual environment
+myenve/
+
+# dbt logs and target
+logs/
+my_project/logs/
+my_project/target/
+my_project/dbt_packages/
+
+# Credentials - NEVER commit this
+my_project/profiles.yml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

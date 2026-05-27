@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: raw
+    database: SNOWFLAKE_DBT    
+    schema: dbt_project         
+    tables:
+      - name: tbl_movies
+      - name: tbl_ratings
+      - name: tbl_links
+      - name: tbl_tags

@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: stg_movies
+    description: "Cleaned movies data with release year extracted"
+    columns:
+      - name: movie_id
+        description: "Primary key for movies"
+        tests:
+          - unique
+          - not_null
+
+      - name: title
+        description: "Movie title with year"
+        tests:
+          - not_null
+
+      - name: genres
+        description: "Pipe separated genres"
+        tests:
+          - not_null
+
+      - name: release_year
+        description: "Extracted release year from title"
+
+  - name: stg_ratings
+    description: "Cleaned ratings data"
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+
+      - name: movie_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_movies')
+                field: movie_id
+
+      - name: rating
+        description: "Rating value between 0.5 and 5.0"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+
+  - name: stg_tags
+    description: "Cleaned tags data"
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+
+      - name: movie_id
+        tests:
+          - not_null
+
+      - name: tag
+        tests:
+          - not_null
+
+  - name: stg_links
+    description: "Cleaned links data"
+    columns:
+      - name: movie_id
+        tests:
+          - unique
+          - not_null
