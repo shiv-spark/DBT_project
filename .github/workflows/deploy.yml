@@ -1,0 +1,63 @@
+name: dbt Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dbt-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dbt Snowflake
+        run: pip install dbt-snowflake==1.11.5
+
+      - name: Create profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          my_project:
+            target: prod
+            outputs:
+              prod:
+                type: snowflake
+                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.SNOWFLAKE_USER }}
+                password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+                role: ${{ secrets.SNOWFLAKE_ROLE }}
+                database: ${{ secrets.SNOWFLAKE_DATABASE }}
+                warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+                schema: dbt_prod
+                threads: 4
+          EOF
+
+      - name: dbt run
+        run: dbt run --target prod
+        working-directory: my_project
+
+      - name: dbt test
+        run: dbt test --target prod --no-partial-parse
+        working-directory: my_project
+
+      - name: dbt snapshot
+        run: dbt snapshot --target prod
+        working-directory: my_project
+
+      - name: dbt docs generate
+        run: dbt docs generate --target prod
+        working-directory: my_project
+
+      - name: Upload docs artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dbt-docs
+          path: my_project/target/
